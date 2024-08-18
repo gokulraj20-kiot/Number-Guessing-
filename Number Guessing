@@ -1,0 +1,77 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class NumberGuessingGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        int score = 0;
+        int rounds = 0;
+        
+        System.out.println("Welcome to the Number Guessing Game!");
+        
+        while (true) {
+            rounds++;
+            System.out.println("\n----- Round " + rounds + " -----");
+            boolean roundWon = playRound(random, scanner);
+            
+            if (roundWon) {
+                score++;
+            }
+            
+            System.out.println("\nScore: " + score + "/" + rounds);
+            if (!playAgain(scanner)) {
+                System.out.println("\nThank you for playing! See you next time.");
+                break;
+            }
+        }
+        
+        scanner.close();
+    }
+    
+    public static boolean playRound(Random random, Scanner scanner) {
+        int number = random.nextInt(100) + 1; // Generates a random number between 1 and 100
+        int maxAttempts = 10;
+        
+        System.out.println("I have chosen a number between 1 and 100. Let's see if you can guess it.");
+        
+        for (int attempts = 1; attempts <= maxAttempts; attempts++) {
+            System.out.print("\nEnter your guess (attempt " + attempts + "/" + maxAttempts + "): ");
+            
+            while (!scanner.hasNextInt()) {
+                System.out.print("Invalid input! Please enter a valid number: ");
+                scanner.next(); // consume invalid input
+            }
+            
+            int guess = scanner.nextInt();
+            
+            if (guess < number) {
+                System.out.println("Too low! Try guessing a higher number.");
+            } else if (guess > number) {
+                System.out.println("Too high! Try guessing a lower number.");
+            } else {
+                System.out.println("Congratulations! You guessed the number " + number + " correctly!");
+                System.out.println("It took you " + attempts + " attempts.");
+                return true;
+            }
+        }
+        
+        System.out.println("\nGame Over! The number I was thinking of was " + number + ". Better luck next time!");
+        return false;
+    }
+    
+    public static boolean playAgain(Scanner scanner) {
+        while (true) {
+            System.out.print("\nDo you want to play again? (yes/no): ");
+            String play = scanner.next().toLowerCase();
+            
+            if (play.equals("yes")) {
+                return true;
+            } else if (play.equals("no")) {
+                return false;
+            } else {
+                System.out.println("Invalid input! Please enter 'yes' or 'no'.");
+            }
+        }
+    }
+}
